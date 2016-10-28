@@ -1,0 +1,74 @@
+<dom-module id="account-launcher">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="{{loggedIn}}">
+      <h4>User is logged in </h4>
+    </template>
+    <template is="dom-if" if="{{!loggedIn}}">
+      <account-signin user="{{user}}"></account-signin>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "account-launcher",
+      properties: {
+        route: {
+          type: String,
+          notify: true,
+          route: "routeChanged"
+        },
+        loggedIn: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        user: {
+          type: Object,
+          notify: true
+        },
+        params: {
+          type: Object,
+          notify: true,
+          observer: "paramsChanged"
+        },
+        loading: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          observer: "loaderChanged"
+        },
+        view: {
+          type: Object,
+          notify: true,
+          observer: 'viewChanged'
+        }
+      },
+      routeChanged: function(e){
+        console.log(e);
+      },
+      paramsChanged: function(e){
+
+      },
+      loaderChanged: function(e){
+        console.log(e);
+      },
+      viewChanged: function(e){
+        console.log(e);
+      },
+      contentUpdated: function(e){
+        //console.log(e);
+      },
+      attachedCallback: function(e){
+
+      },
+      ready: function(){
+
+
+      }
+    });
+  </script>
+</dom-module>

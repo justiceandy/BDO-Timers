@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<script src="/static/bower_components/page/page.js"></script>
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+    // We use Page.js for routing. This is a Micro
+    // client-side router inspired by the Express router
+    // More info: https://visionmedia.github.io/page.js/
+    // Removes end / from app.baseUrl which page.base requires for production
+    // Middleware
+    // Middleware
+     function scrollToTop(ctx, next) {
+       next();
+     }
+     function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) == variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return '';
+    }
+     function addCrumb(crumb){
+       app.breadcrumbs = [];
+       if(crumb.type != 'home'){
+         homeCrumb =  {
+           title: 'Home',
+           url: '/home'
+         }
+       app.breadcrumbs.push(homeCrumb);
+       }
+      app.breadcrumbs.push(crumb);
+      return true;
+     }
+    // Routes
+    page('*', function(ctx, next) {
+      next();
+    });
+    page(app.baseUrl, function(data) {
+      data.params.controller = 'browse';
+      app.params = data.params;
+      app.route = 'home';
+    });
+
+    page('/boss/:boss/:content', scrollToTop, function(data) {
+      data.params.controller = 'boss';
+      app.params = data.params;
+      app.route = 'boss';
+    });
+    page('/discord', scrollToTop, function(data) {
+      data.params.controller = 'discord';
+      data.params.content = 'features';
+      app.params = data.params;
+      app.route = 'launcher';
+    });
+    page('/discord/:content', scrollToTop, function(data) {
+      data.params.controller = 'discord';
+      app.params = data.params;
+      app.route = 'launcher';
+    });
+    page('/twitch', scrollToTop, function(data) {
+      data.params.controller = 'twitch';
+      data.params.content = 'features';
+      app.params = data.params;
+      app.route = 'launcher';
+    });
+    page('/twitch/:content', scrollToTop, function(data) {
+      data.params.controller = 'twitch';
+      app.params = data.params;
+      app.route = 'launcher';
+    });
+    page('/', scrollToTop, function(data) {
+      data.params.controller = 'browse';
+      app.params = data.params;
+      app.route = 'home';
+    });
+    page('/tracker', scrollToTop, function(data) {
+      data.params.controller = 'tracker';
+      app.params = data.params;
+      app.route = 'launcher';
+    });
+    page('/login', scrollToTop, function(data) {
+      data.params.controller = 'account';
+      app.params = data.params;
+      app.route = 'login';
+    });
+    page('/signup', scrollToTop, function(data) {
+      data.params.controller = 'account';
+      app.params = data.params;
+      app.route = 'signup';
+    });
+    page('/account', scrollToTop, function(data) {
+      data.params.controller = 'account';
+      app.params = data.params;
+      app.route = 'account';
+    });
+    page('*', function() {
+      // app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+      // app.$.toast.show();
+      page.redirect(app.baseUrl);
+    });
+    // add #! before urls
+    page({
+      hashbang: false
+    });
+  });
+</script>

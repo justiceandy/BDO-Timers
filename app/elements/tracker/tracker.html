@@ -1,0 +1,352 @@
+
+<dom-module id="tracker-grid">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+      <style include="app-grid-style">
+        :host {
+          --app-grid-columns: 4;
+          --app-grid-item-height: 200px;
+        }
+        paper-tooltip{
+          margin-top: -105px;
+          height: 94px;
+          width: 140px;
+          z-index: 0;
+        }
+        h4{
+          font-family: roboto;
+          color: #cdcdcd;
+          font-size: 1.1em;
+          text-align: left;
+
+        }
+        ul {
+          padding: 0;
+          margin-top: 0px;
+          list-style: none;
+        }
+        li{
+          cursor:pointer;
+        }
+        li:hover{
+            opacity: 1 !important;
+        }
+        .item {
+          padding: 10px;
+        }
+
+        @media (max-width: 640px) {
+          :host {
+            --app-grid-columns: 1;
+          }
+        }
+        li paper-material{
+          height:100%;
+          width:100%;
+        }
+        li paper-material label{
+          color: white;
+          text-align: center;
+          float: left;
+          width: 100%;
+          padding: 10px;
+          background: #642323;
+          box-sizing: border-box;
+          margin-top: -42px;
+          position: relative;
+          font-size: 1.2em;
+          font-family: roboto;
+        }
+        li paper-material iron-image{
+          height:100%;
+          width:100%;
+        }
+        .notActive{
+          -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+          filter: grayscale(100%);
+        }
+        .activeLabel{
+          background: #23642f !important;
+        }
+        .inactive{
+              opacity: 0.5;
+        }
+        .windowBar.active{
+          position: absolute;
+          left: 0;
+          background: #228835;
+          height: 43px;
+          top: 142px;
+        }
+        .windowBar.inactive{
+          position: absolute;
+          left: 0;
+          background: #e72222;
+          height: 43px;
+          top: 142px;
+        }
+        .activeLabel font, .inactiveLabel font{
+          position: relative;
+          z-index: 1;
+        }
+        .bossTimer{
+          position: absolute;
+          z-index: 1;
+          right: 6px;
+          top: 155px;
+          font-family: roboto;
+          color: #e8ffed;
+        }
+        .isUpContainer, .notUpContainer{
+          float: left;
+          width: 100%;
+          clear: both;
+        }
+        .isUpContainer{
+          margin: auto;
+          max-width: 80%;
+          float: none;
+          padding-top: 15px;
+        }
+        .isUpContainer table{
+          float: left;
+          width: 100%;
+          box-sizing: border-box;
+          height: 100%;
+          font-family: roboto;
+        }
+        .isUpContainer table thead th{
+          padding: 5px;
+          border-bottom: 1px solid #202020;
+          background: #dadada;
+        }
+        .isUpContainer ul{
+          margin-bottom:0px;
+        }
+        .isUpContainer table tbody td{
+          padding: 4.9px;
+          color: white;
+        }
+         .notUpContainer{
+        }
+        .activeItemChannels{
+          float: right;
+          width: 65%;
+          box-sizing: border-box;
+          background: #333333;
+          height: 230px;
+        }
+        .upLabel{
+          margin-top: 0px !important;
+          background: #004b9d !important;
+          border-bottom: 1px solid #00070f;
+        }
+        .activeItemChannels span{
+          float: left;
+          width: 50%;
+          color: white;
+          padding: 5px;
+          font-family: roboto;
+          box-sizing: border-box;
+        }
+        .activeItemChannels span font{
+          float: right;
+          margin-right: 20%;
+        }
+        .upItem{
+          padding:0px;
+        }
+        .upItem iron-image{
+          height: 150px;
+          width: 150px;
+        }
+        .upLabel span{
+          float:right;
+        }
+        .upItem paper-material{
+          height:276px !important;
+        }
+        .clear{
+          clear: both;
+        }
+        ol{
+          list-style: none;
+        }
+        .upKeyMap{
+          float: left;
+          width: 100%;
+        }
+        .upKeyMap ol li{
+          float: left;
+        }
+        .upKeyMap ol{
+
+        }
+        .notUpContainer ul{
+          background: #333333;
+          border: 1px solid #363636;
+        }
+        server-select{
+          float:left;
+        }
+        channel-select{
+          float:left;
+          margin-left:30px;
+        }
+        .topTools{
+          float: left;
+          margin-bottom: 15px;
+        }
+      </style>
+      <div class="topTools">
+        <server-select></server-select>
+        <channel-select></channel-select>
+      </div>
+
+      <!--- Boss Up Container --->
+      <div class="isUpContainer">
+        <ul>
+          <template is="dom-repeat" items="[[timers]]" index-as="index">
+            <template is="dom-if" if="{{isUp(index)}}">
+              <li class="item upItem">
+                <paper-material elevation="1" on-tap="goToBoss" boss$="[[item.short]]">
+                  <label class="upLabel">
+                    <iron-image src="/static/images/arrow-up-bold-circle-outline.png" style="height:25px;width:25px; display:block;float: left;" class="upIcon"></iron-image>
+                    <font>[[item.boss]]</font>
+                    <span>2m15s</span>
+                  </label>
+                  <iron-image src="[[item.image]]" sizing="cover" imageItem$="[[index]]" style="height:230px;width:35%;"></iron-image>
+                  <div class="activeItemChannels">
+                    <table cellspacing="0" cellpadding="0">
+                      <thead>
+                        <tr>
+                          <th>Channel</th>
+                          <th>U1</th>
+                          <th>U2</th>
+                          <th>Members</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    <template is="dom-repeat" items="[[item.channels]]" as="channel" index-as="channelIndex">
+                      <tr>
+                        <td>[[channel.name]]</td>
+                        <template is="dom-repeat" items="[[channel.status]]" as="status" index-as="statusIndex">
+                          <td>[[status.percent]]%</td>
+                        </template>
+                      <td>0</td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  </div>
+                </paper-material>
+
+              </li>
+            </template>
+        </template>
+        </ul>
+        <div class="upKeyMap">
+          <ol>
+            <li>* = selected channel</li>
+            <li>* = unknown status</li>
+          </ol>
+        </div>
+      </div>
+
+      <!--- Not Up Container --->
+      <div class="notUpContainer">
+        <h4>In Window:</h4>
+      <ul class="app-grid">
+        <template is="dom-repeat" items="[[timers]]" index-as="index">
+          <template is="dom-if" if="{{inWindow(index)}}">
+            <li class="item">
+              <paper-material id="[[item.short]]" elevation="1" on-tap="goToBoss" boss$="[[item.short]]">
+                <font class="bossTimer">2h15m</font>
+                <iron-image src="[[item.image]]" sizing="cover" imageItem$="[[index]]"></iron-image>
+                <label class="activeLabel"><font>[[item.boss]]</font></label>
+                <span class="windowBar active" style="width:[[item.timerPercent]]%;"></span>
+              </paper-material>
+              <paper-tooltip for="[[item.short]]" animation-delay="0">
+                <font>Timer:</font>
+                <span>[[item.timer]]</span>
+              </paper-tooltip>
+            </li>
+          </template>
+      </template>
+    </ul>
+    <h4>Dead:</h4>
+    <ul class="app-grid">
+      <template is="dom-repeat" items="[[timers]]" index-as="index">
+        <template is="dom-if" if="{{!inWindow(index)}}">
+          <li class="item inactive">
+            <paper-material id="[[item.short]]" elevation="1" on-tap="goToBoss" boss$="[[item.short]]">
+              <font class="bossTimer">2h15m</font>
+              <iron-image src="[[item.image]]" sizing="cover" imageItem$="[[index]]" class="notActive"></iron-image>
+              <label class="inactiveLabel">
+                <iron-image src="/static/images/arrow-down-bold-circle-outline.png" style="height:25px;width:25px;position:absolute;left:5px;" class="deadIcon"></iron-image>
+                <font>[[item.boss]]</font>
+              </label>
+              <span class="windowBar inactive" style="width:[[item.timerPercent]]%;"></span>
+            </paper-material>
+            <paper-tooltip for="[[item.short]]" animation-delay="0">
+              <font>Timer:</font>
+              <span>[[item.timer]]</span>
+            </paper-tooltip>
+          </li>
+        </template>
+    </template>
+      </ul>
+    </div>
+    <div class="clear"></div>
+  </template>
+  <script>
+    Polymer({
+      is: "tracker-grid",
+      properties: {
+        timers: {
+          type: Array,
+          notify: true,
+          value: [
+            {'boss': 'Dastard Bheg', 'short': 'bheg', 'image': '/static/images/wbt_bheg.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': false, 'timerPercent': '50', 'up': true,
+              'channels':  [
+                {'name': 'Velia', 'status': [{'up':'true', 'percent': 25},{'up':'true', 'percent': 50}]},
+                {'name': 'Balenos', 'status': [{'up':'true', 'percent': null},{'up':'true', 'percent': null}]},
+                {'name': 'Calpehon', 'status': [{'up':'true', 'percent': null},{'up':'true', 'percent': null}]},
+                {'name': 'Serendia', 'status': [{'up':'true', 'percent': null},{'up':'true', 'percent': null}]},
+                {'name': 'Mediah', 'status': [{'up':'true', 'percent': null},{'up':'true', 'percent': null}]},
+                {'name': 'Valencia', 'status': [{'up':'true', 'percent': null},{'up':'true', 'percent': null}]},
+              ]
+            },
+            {'boss': 'Dim Tree Spirit', 'short': 'dim', 'image': '/static/images/wbt_dim.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': true, 'timerPercent': '50', 'up': false},
+            {'boss': 'Mudster', 'short': 'mud', 'image': '/static/images/wbt_mudster.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': false, 'timerPercent': '50', 'up': false},
+            {'boss': 'Red Nose', 'short': 'rednose', 'image': '/static/images/wbt_red.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': false, 'timerPercent': '50', 'up': false},
+            {'boss': 'Kharanda', 'short': 'harpy', 'image': '/static/images/wbt_harpy.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': false, 'timerPercent': '50', 'up': false},
+            {'boss': 'Kzarka', 'short': 'kzarka', 'image': '/static/images/wbt_kzarka.png', 'timer': '12 hours', 'lastKill': '', 'inWindow': false, 'timerPercent': '50', 'up': false}
+          ]
+        }
+      },
+      goToBoss: function(e){
+        var boss = e.target.parentNode.parentNode.attributes.boss.value;
+        page('/boss/'+boss+'/info');
+      },
+      isChannelDead: function(e){
+        console.log(e);
+        return false;
+      },
+      inWindow: function(e){
+        if(this.timers[e].up){
+          return false;
+        }
+        else{
+          return this.timers[e].inWindow;
+        }
+      },
+      isUp: function(e){
+        return this.timers[e].up;
+      }
+    })
+  </script>
+</dom-module>

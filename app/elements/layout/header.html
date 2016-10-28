@@ -1,0 +1,96 @@
+<dom-module id="layout-header">
+  <style>
+    :host {
+      display: block;
+    --my-custom-color: grey;
+     --paper-tab-ink: var(--my-custom-color);
+
+     /* custom CSS property */
+     --paper-tabs-selection-bar-color: #0064d3;
+    }
+    app-header{
+      background: #202020;
+      color: white;
+      z-index:25;
+      max-width: 1250px;
+      margin: auto;
+    }
+    paper-tabs{
+      width: 80%;
+      margin: auto;
+    }
+    h1 iron-image{
+      padding: 5px;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    #drawer{
+      z-index:50;
+    }
+    @media (max-width: 900px) {
+      h1{
+        display:none;
+      }
+    }
+    @media (max-width: 310px) {
+    #signIn{
+      display: none;
+    }
+    }
+    @media (min-width: 900px) {
+      paper-icon-button{
+        display:none;
+      }
+      paper-tabs{
+        max-width: 650px;
+      }
+    }
+
+  </style>
+
+
+  <template>
+
+      <app-header condenses reveals fixed effects="waterfall">
+        <app-toolbar>
+          <paper-icon-button icon="menu" on-tap="showMenu"></paper-icon-button>
+
+          <h1 main-title><iron-image src="/static/images/logo.png"></iron-image></h1>
+
+          <paper-tabs selected="0" sticky>
+            <paper-tab on-tap="changePage" page="home" id="features">Home</paper-tab>
+            <paper-tab on-tap="changePage" page="tracker" id="tracker">Tracker</paper-tab>
+            <paper-tab on-tap="changePage" page="account" id="signIn">Sign In</paper-tab>
+          </paper-tabs>
+
+        </app-toolbar>
+
+      </app-header>
+
+      <app-drawer id="drawer" swipe-open></app-drawer>
+
+  </template>
+  <script>
+  Polymer({
+    is: "layout-header",
+    properties: {
+      tab: {
+        type: String,
+        notify: true
+      },
+      params: {
+        type: Object,
+        notify: true,
+        observer: "paramsChanged"
+      }
+    },
+    showMenu: function(){
+      this.$.drawer.toggle();
+    },
+    changePage: function(e){
+      console.log(e.target.parentNode.attributes.page.value);
+      this.set('tab', e.target.parentNode.attributes.page.value);
+    }
+  })
+  </script>
+</dom-module>

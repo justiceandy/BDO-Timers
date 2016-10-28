@@ -1,0 +1,58 @@
+<dom-module id="tracker-launcher">
+  <style>
+    :host {
+      display: block;
+      max-width: 1030px;
+      margin: auto;
+    }
+  </style>
+  <template>
+    <tracker-grid params="{{params}}" route="{{route}}"></tracker-grid>
+  </template>
+  <script>
+    Polymer({
+      is: "tracker-launcher",
+      properties: {
+        route: {
+          type: String,
+          notify: true
+        },
+        params: {
+          type: Object,
+          notify: true,
+          observer: "paramsChanged"
+        },
+        loading: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          observer: "loaderChanged"
+        },
+        view: {
+          type: Object,
+          notify: true,
+          observer: 'viewChanged'
+        }
+      },
+      paramsChanged: function(e){
+
+      },
+      loaderChanged: function(e){
+        console.log(e);
+      },
+      viewChanged: function(e){
+        console.log(e);
+      },
+      contentUpdated: function(e){
+        //console.log(e);
+      },
+      attachedCallback: function(e){
+
+      },
+      ready: function(){
+
+
+      }
+    });
+  </script>
+</dom-module>

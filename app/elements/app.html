@@ -1,0 +1,33 @@
+<<dom-module id="bdo-timers">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <!-- Intialize Firebase -->
+    <layout-header route="{{route}}" params="{{params}}" tab="{{tab}}"></layout-header>
+    <section class="main" id$="{{route}}">
+      <app-launcher route="{{route}}" params="{{params}}" tab="{{tab}}"></app-launcher>
+    </section>
+    <layout-footer route="{{route}}" params="{{params}}"></layout-footer>
+  </template>
+  <script>
+    Polymer({
+      is: "bdo-timers",
+      properties: {
+        user: {
+          type: Object,
+          notify: true,
+          observer: "userChanged"
+        }
+      },
+      userChanged: function(e){
+        console.log(e);
+      },
+      handleError: function(){
+        console.log('Error Thrown');
+      }
+    })
+  </script>
+</dom-module>

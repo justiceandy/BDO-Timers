@@ -1,0 +1,214 @@
+<dom-module id="account-signin">
+  <style>
+    :host {
+      --my-custom-color: grey;
+       --paper-tab-ink: var(--my-custom-color);
+
+       /* custom CSS property */
+       --paper-tabs-selection-bar-color: #0064d3;
+
+      /* Label and underline color when the input is not focused */
+    --paper-input-container-color: white;
+
+    /* Label and underline color when the input is focused */
+    --paper-input-container-focus-color: #0064d3;
+
+    /* Label and underline color when the input is invalid */
+    --paper-input-container-invalid-color: green;
+
+    /* Input foreground color */
+    --paper-input-container-input-color: white;
+      display: block;
+    }
+
+    paper-material{
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      border: 1px solid #383838;
+      background: #2d2d2d;
+      border-radius: 5px;
+    }
+    .userSignInContainer{
+      max-width: 300px;
+      padding-top:25px;
+      margin: auto;
+      padding-bottom: 25px;
+    }
+
+    paper-input{
+      width: 77%;
+      color: white;
+      margin: auto;
+    }
+    input{
+      background:white;
+    }
+    *{
+      font-family: roboto;
+    }
+    paper-tab{
+      color:white;
+    }
+    paper-button{
+      margin-top: 19px;
+    width: 50%;
+    background: #0064d3;
+    padding: 8px;
+    color: white;
+    font-size: 1em;
+    text-transform: none;
+    }
+    .userRequestInviteContainer{
+      color: white;
+      padding-top: 25px;
+    }
+    iron-image{
+      float: left;
+      margin-top: 30px;
+    }
+  </style>
+  <template>
+    <firebase-auth id="auth" user="{{user}}"
+     status-known="{{statusKnown}}"
+     location="https://bdo-timers.firebaseio.com"
+     provider="google"
+     on-error="errorHandler"
+     on-user-created="userSuccessHandler"
+     on-password-changed="userSuccessHandler"
+     on-password-reset="userSuccessHandler"
+     params="{{params}}"
+     on-user-removed="userSuccessHandler"></firebase-auth>
+
+    <paper-material elevation="1">
+      <paper-tabs selected="0">
+        <paper-tab on-tap="showSignIn">Sign In</paper-tab>
+        <paper-tab on-tap="showCreateAccount">Create Account</paper-tab>
+      </paper-tabs>
+
+
+      <template is="dom-if" if="{{existing}}">
+        <div class="userSignInContainer">
+          <form is="iron-form" id="signInForm" method="post">
+              <iron-image src="/static/images/account-box-outline.png" style="height:25px;width:25px;"></iron-image>
+              <paper-input label="Username" value="{{email}}"></paper-input>
+              <iron-image src="/static/images/key-variant.png" style="height:25px;width:25px;"></iron-image>
+              <paper-input label="Password" type="password" value="{{password}}"></paper-input>
+          </form>
+          <paper-button raised on-tap="signInWithEmailAndPassword">Login</paper-button>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!existing}}">
+        <div class="userRequestInviteContainer userSignInContainer">
+          <p>Invite Code is required to create an account during Alpha Testing Phase</p>
+          <p>To Request an Invite Code, enter your email below.</p>
+          <form is="iron-form" id="requestAccess" method="post">
+              <paper-input label="Email Address"></paper-input>
+          </form>
+          <paper-button raised on-tap="loginUser">Request Invite</paper-button>
+        </div>
+      </template>
+    </paper-material>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'account-signin',
+      properties: {
+        existing: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
+        statusKnown: {
+          type: String,
+          notify: true
+        },
+        user: {
+          type:Object,
+          notify: true,
+          observer: "userChanged"
+        },
+        error: {
+          type: Object,
+          notify: true,
+          value: null
+        }
+      },
+      userChanged: function(e){
+        console.log(e);
+      },
+      showError: function(e){
+
+      },
+      ready: function(e){
+        var app = document.getElementById('app');
+        app.error = null;
+        this.showError = function(e) {
+          this.error = e.detail;
+        };
+        this.signInAnonymously = function() {
+          this.error = null;
+          this.$.auth.signInAnonymously();
+        };
+        this.signInWithGoogle = function() {
+          this.error = null;
+          this.$.auth.signInWithPopup();
+        };
+        this.signInWithEmailAndPassword = function(e) {
+          if (e) { e.preventDefault(); }
+          this.error = null;
+          this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+          this.email = null;
+          this.password = null;
+        };
+        this.createUserWithEmailAndPassword = function() {
+          this.error = null;
+          this.$.auth.createUserWithEmailAndPassword(this.email, this.password);
+          this.email = null;
+          this.password = null;
+        }
+        this.signOut = function() {
+          this.error = null;
+          this.$.auth.signOut();
+        };
+      }
+    })
+  </script>
+
+
+  <script type="text/javascript">
+   document.addEventListener('WebComponentsReady', function() {
+     var app = document.getElementById('app');
+     app.error = null;
+     app.showError = function(e) {
+       this.error = e.detail;
+     };
+     app.signInAnonymously = function() {
+       this.error = null;
+       this.$.auth.signInAnonymously();
+     };
+     app.signInWithGoogle = function() {
+       this.error = null;
+       this.$.auth.signInWithPopup();
+     };
+     app.signInWithEmailAndPassword = function(e) {
+       if (e) { e.preventDefault(); }
+       this.error = null;
+       this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+       this.email = null;
+       this.password = null;
+     };
+     app.createUserWithEmailAndPassword = function() {
+       this.error = null;
+       this.$.auth.createUserWithEmailAndPassword(this.email, this.password);
+       this.email = null;
+       this.password = null;
+     }
+     app.signOut = function() {
+       this.error = null;
+       this.$.auth.signOut();
+     };
+   });
+ </script>
+</dom-module>

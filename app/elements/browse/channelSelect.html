@@ -1,0 +1,54 @@
+<dom-module id="channel-select">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-item{
+      color:black;
+    }
+  </style>
+  <template>
+
+    <paper-dropdown-menu class="custom" label="Channel: [[currentChannel]]" no-label-float>
+      <paper-listbox class="dropdown-content">
+        <template is="dom-repeat" items="[[channels]]" index-as="index">
+          <paper-item on-tap="setChannel" channel$="[[item]]">[[item]]</paper-item>
+        </template>
+      </paper-listbox>
+    </paper-dropdown-menu>
+  </template>
+  <script>
+  Polymer({
+    is: "channel-select",
+    properties: {
+      channels: {
+        type: Array,
+        notify: true,
+        value: [
+          'Velia U1',
+          'Velia U2',
+          'Balenos U1',
+          'Balenos U2',
+          'Calpheon U1',
+          'Calpheon U2',
+          'Serendia U1',
+          'Serendia U2',
+          'Mediah U1',
+          'Mediah U2',
+          'Valencia U1',
+          'Valencia U2'
+        ]
+      },
+      currentChannel: {
+        type: String,
+        notify: true,
+        value: 'Velia U1'
+      }
+    },
+    setChannel: function(e){
+      var item = e.target.attributes.channel.value;
+      this.set('currentChannel', item);
+    }
+  })
+  </script>
+</dom-module>

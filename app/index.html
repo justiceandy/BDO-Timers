@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <title>Boss Timers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Older Chrome and other browsers -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Notes">
+  <meta name="theme-color" content="#9C27B0">
+  <link rel="icon" sizes="192x192" href="images/icon-4x.png">
+
+  <!-- Mobile Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#9C27B0">
+  <meta name="apple-mobile-web-app-title" content="Notes">
+  <link rel="apple-touch-icon" href="../../note-app-elements/images/icon-square-3x.png">
+
+  <!-- Windows -->
+  <meta name="msapplication-TileColor" content="#9C27B0">
+  <meta name="msapplication-TileImage" content="../../note-app-elements/images/icon-inverted-3x.png">
+
+  <script src="/static/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="/static/bower_components/iron-component-page/iron-component-page.html">
+  <link rel="import" href="/elements/elements.html" />
+</head>
+<body unresolved>
+<style>
+  body{
+    background: #202020;
+    margin: 0;
+  }
+  @media (min-width: 705px) {
+    #home.main{
+      background-image: url('/static/images/zarka2.jpg');
+      background-size: cover;
+      min-height: 80vh;
+    }
+  }
+  #home.main{
+    min-height: 80vh;
+  }
+  .main{
+    min-height: 500px;
+    -webkit-box-shadow: inset 2px 2px 17px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 2px 2px 17px 0px rgba(0,0,0,0.75);
+    box-shadow: inset 2px 2px 17px 0px rgba(0,0,0,0.75);
+  }
+</style>
+  <!-- Configure Service Worker caching: -->
+  <platinum-sw-register
+      auto-register
+      skip-waiting
+      clients-claim
+      reload-on-install
+      href="../sw-import.js">
+    <platinum-sw-cache
+        default-cache-strategy="networkFirst">
+    </platinum-sw-cache>
+  </platinum-sw-register>
+
+  <!-- App Element -->
+  <bdo-timers id="app"></bdo-timers>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

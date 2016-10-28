@@ -1,0 +1,64 @@
+<dom-module id="browse-launcher">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="{{view.home}}">
+      <home-page></home-page>
+    </template>
+    <template is="dom-if" if="{{view.features}}">
+      <features-page></features-page>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "browse-launcher",
+      properties: {
+        route: {
+          type: String,
+          notify: true
+        },
+        params: {
+          type: Object,
+          notify: true,
+          observer: "paramsChanged"
+        },
+        loading: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          observer: "loaderChanged"
+        },
+        view: {
+          type: Object,
+          notify: true,
+          value: {
+            'home': true
+          },
+          observer: 'viewChanged'
+        }
+      },
+      paramsChanged: function(e){
+
+      },
+      loaderChanged: function(e){
+        console.log(e);
+      },
+      viewChanged: function(e){
+        console.log(e);
+      },
+      contentUpdated: function(e){
+        //console.log(e);
+      },
+      attachedCallback: function(e){
+
+      },
+      ready: function(){
+
+
+      }
+    });
+  </script>
+</dom-module>

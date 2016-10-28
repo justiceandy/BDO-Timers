@@ -1,0 +1,253 @@
+
+<dom-module id="home-page">
+  <style>
+    :host {
+      display: block;
+    }
+    .container{
+      height:100%;
+      width:100%;
+    }
+    .homeInfo{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .homeInfo ul{
+      list-style:none;
+    }
+    .homeInfo ul li{
+      padding: 10px;
+      height: 170px;
+      opacity: 1.0;
+      font-weight: 700;
+      font-family: roboto;
+      font-size: 1.03em;
+      color: #b50000;
+    }
+    .homeInfoFeatures{
+
+    }
+    iron-image{
+      position: relative;
+      opacity: 0.6;
+    }
+  </style>
+  <style include="app-grid-style">
+
+    :host {
+      --app-grid-columns: 4;
+      --app-grid-item-height: 200px;
+    }
+
+    @media (max-width: 640px) {
+      :host {
+        --app-grid-columns: 2;
+      }
+    }
+    @media (max-width: 315px) {
+      :host {
+        --app-grid-columns: 1;
+      }
+    }
+    paper-tooltip{
+      margin-top: -105px;
+      height: 94px;
+      width: 140px;
+      z-index: 0;
+    }
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+    li{
+      cursor:pointer;
+    }
+    li:hover{
+        opacity: 1 !important;
+    }
+    .item {
+      padding: 10px;
+    }
+
+    li paper-material{
+      background: #282829;
+      border: 1px solid #272626;
+      color: #fbfbfb;
+      font-size: 1em;
+      border-radius: 3px;
+    }
+    li paper-material:hover{
+        background: #3a3a3a !important;
+    }
+    li paper-material:hover iron-image{
+      opacity:1.0 !important;
+    }
+    li paper-material font{
+      float: left;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  padding-top: 7px;
+    }
+    .homeFeatures{
+      display: table;
+    height: 59px;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    }
+    .homeFeature iron-image{
+      position: relative;
+    }
+    .homeInfoFeatures{
+      max-width: 750px;
+margin: auto;
+    }
+    .homeInfo h4{
+      color: white;
+      margin-top:8px;
+      font-size: 1.4em;
+    }
+    *{
+      font-family: roboto;
+    }
+  </style>
+  <template>
+    <section class="container">
+      <section class="homeInfo">
+        <h4>Black Desert Online Boss Tracker</h4>
+        <div class="homeInfoFeatures">
+          <ul class="app-grid">
+          <template is="dom-repeat" items="[[features]]">
+            <li>
+            <paper-material elevation="1">
+              <div class="homeFeature">
+              <div style="display: table;  overflow: hidden;height: 150px;  width: 100%;">
+                <div style="display: table-cell; vertical-align: middle;">
+                  <div>
+                    <iron-image src$="[[item.icon]]" ></iron-image>
+                    <font>[[item.label]]</font>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </paper-material>
+            </li>
+          </template>
+        </ul>
+        </div>
+      </section>
+    </section>
+  </template>
+  <script>
+    Polymer({
+      is: "home-page",
+      properties: {
+        display: {
+          type: Object,
+          notify: true,
+          observer: "displayChanged"
+        },
+        displayClass: {
+          type: String,
+          notify: true
+        },
+        timers: {
+          type: Array,
+          notify: true,
+          value: []
+        },
+        tablet: {
+          type: Boolean,
+          observer: "tabletViewToggled"
+        },
+        smartphone: {
+          type: Boolean,
+          observer: "phoneViewToggled"
+        },
+        displayClass: {
+          type: String,
+          notify: true,
+          observer: "displayClassChanged"
+        },
+        full: {
+          type: Boolean,
+          observer: "fullViewToggled"
+        },
+        features: {
+          type: Array,
+          notify: true,
+          value: [
+            {'label': 'Controlled Access', 'icon': '/static/images/shield-outline.png'},
+            {'label': 'Discord Auth', 'icon': '/static/images/discord.png'},
+            {'label': 'Twitch Auth', 'icon': '/static/images/twitch.png'},
+            {'label': 'Estimated Spawn', 'icon': '/static/images/timer-sand.png'},
+            {'label': 'Guild Access', 'icon': '/static/images/account-card-details.png'},
+            {'label': 'Realtime Alerts', 'icon': '/static/images/cloud-sync.png'},
+            {'label': 'Loot Archives', 'icon': '/static/images/archive.png'},
+            {'label': 'Private Instances', 'icon': '/static/images/server-security.png'},
+            {'label': 'Push Notifications', 'icon': '/static/images/cellphone-iphone.png'},
+            {'label': 'Leaderboards', 'icon': '/static/images/account-star.png'},
+            {'label': 'Open Source', 'icon': '/static/images/code-braces.png'}
+          ]
+        }
+      },
+      displayChanged: function(e){
+        console.log(e);
+        var key = Object.keys(e);
+        key = key[0];
+        this.set('displayClass', 'app-grid '+key);
+      },
+      displayClassChanged: function(e){
+        console.log(e);
+      },
+      tabletViewToggled: function(e){
+        console.log('tablet', e);
+        if(e){
+          this.set('display', {tablet: true});
+        }
+        // if not true, and display exists and isnt smallest
+        if(!e && typeof(this.display) != 'undefined' && typeof(this.display.mini) === 'undefined'){
+          this.set('display', {phone: true});
+        }
+      },
+      fullViewToggled: function(e){
+          console.log('full', e);
+        if(e){
+          this.set('display', {full: true});
+        }
+        // if not true, and display exists and current layout is set to full
+        if(!e && typeof(this.display) != 'undefined' && typeof(this.display.full) != 'undefined'){
+          this.set('display', {tablet: true});
+        }
+      },
+      attached: function() {
+        this._updateGridStyles = this._updateGridStyles || function() {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
+      detached: function() {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
+      phoneViewToggled: function(e){
+        console.log('phone', e);
+        if(e){
+          this.set('display', {phone: true});
+        }
+        else{
+          this.set('display', {mini: true});
+        }
+      },
+      currentClass: function(e){
+        return e;
+      }
+    })
+  </script>
+</dom-module>

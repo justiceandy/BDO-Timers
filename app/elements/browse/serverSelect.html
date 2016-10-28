@@ -1,0 +1,42 @@
+<dom-module id="server-select">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-item{
+      color:black;
+    }
+  </style>
+  <template>
+
+    <paper-dropdown-menu class="custom" label="Server: [[currentServer]]" no-label-float>
+      <paper-listbox class="dropdown-content">
+        <template is="dom-repeat" items="[[servers]]" index-as="index">
+          <paper-item>[[item]]</paper-item>
+        </template>
+      </paper-listbox>
+    </paper-dropdown-menu>
+  </template>
+  <script>
+  Polymer({
+    is: "server-select",
+    properties: {
+      servers: {
+        type: Array,
+        notify: true,
+        value: [
+          'Uno - NA',
+          'Edan - NA',
+          'Jordine - EU',
+          'Croxus - EU'
+        ]
+      },
+      currentServer: {
+        type: String,
+        notify: true,
+        value: 'Uno'
+      }
+    }
+  })
+  </script>
+</dom-module>

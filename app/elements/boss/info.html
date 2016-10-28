@@ -1,0 +1,103 @@
+<dom-module id="boss-info">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <iron-ajax url="{{bossDataUrl}}" on-response="bossDataResponse"></iron-ajax>
+    <iron-ajax url="/api/channels" on-response="channelResponse"></iron-ajax>
+
+    <template is="dom-if" if="{{loaded}}">
+      <section id="bossInfoContainer">
+          <h4>[[boss.name]]</h4>
+          <iron-image src="{{bossImage}}" style="height:100px;width:100px;"></iron-image>
+          <section class="bossInfoInner">
+            <section class="bossDescription bossSection">
+              <h4>Description</h4>
+              <p>[[boss.description]]</h4>
+            </section>
+            <section class="bossAbilities  bossSection">
+              <h4>Abilities</h4>
+            </section>
+            <section class="bossDrop  bossSection">
+              <h4>Drops</h4>
+            </section>
+            <section class="bossKnowledge  bossSection">
+              <h4>Knowledge NPCs</h4>
+            </section>
+          </section>
+
+          <section class="bossInfoTrackingContainer">
+            <ul>
+              <li>Last Kill: </li>
+              <li>Window Length: </li>
+              <li>Estimated Spawn Time: </li>
+              <li>In Window</li>
+              <li>Time Till Window</li>
+              <li>Window Start: </li>
+              <li>Window End: </li>
+            </ul>
+          </section>
+      </section>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "boss-info",
+      properties: {
+        params: {
+          type: Object,
+          notify: true
+        },
+        loaded: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        boss: {
+          type: Object,
+          notify: true,
+          observer: "bossChanged",
+          value: {
+            'name': 'Bheg',
+            'description': '',
+            'images': [
+              '/static/images/wbt_bheg.png'
+            ],
+            'background': '',
+            'drops': [],
+            'timer': {
+              'lastKill': '',
+              'window': {
+                'active': false,
+                'start': '',
+                'stop': ''
+              }
+            }
+          }
+        },
+        channels: {
+          type: Array,
+          notify: true,
+          observer: "channelChanged"
+        },
+        bossImage: {
+          type: String,
+          notify: true
+        }
+      },
+      bossChanged: function(e){
+        console.log(e);
+        this.set('bossImage', e.images[0]);
+        this.set('loaded', true);
+      },
+      channelChanged: function(e){
+        console.log(e);
+      },
+      channelResponse: function(e){
+        console.log(e.detail.response);
+      }
+    })
+  </script>
+</dom-module>

@@ -1,0 +1,71 @@
+<dom-module id="boss-launcher">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="{{view.info}}">
+      <boss-info></boss-info>
+    </template>
+    <template is="dom-if" if="{{view.history}}">
+      <boss-history></boss-history>
+    </template>
+    <template is="dom-if" if="{{view.drops}}">
+      <boss-drops></boss-drops>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "boss-launcher",
+      properties: {
+        route: {
+          type: String,
+          notify: true,
+          observer: "routeChanged"
+        },
+        params: {
+          type: Object,
+          notify: true,
+          observer: "paramsChanged"
+        },
+        loading: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          observer: "loaderChanged"
+        },
+        view: {
+          type: Object,
+          notify: true,
+          observer: 'viewChanged'
+        }
+      },
+      paramsChanged: function(e){
+        console.log('params:', e.content);
+        var view = {};
+        view[e.content] = true;
+        this.set('view', view);
+      },
+      routeChanged: function(e){
+        console.log('route', e);
+      },
+      loaderChanged: function(e){
+        console.log(e);
+      },
+      viewChanged: function(e){
+        console.log(e);
+      },
+      contentUpdated: function(e){
+        //console.log(e);
+      },
+      attachedCallback: function(e){
+
+      },
+      ready: function(){
+
+
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,30 @@
+{
+  "name": "bdo-boss-timers",
+  "version": "1.0.0",
+  "description": "Boss Timer Application",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chillcapped/BDO-Boss-Timers.git"
+  },
+  "author": "chillcapped",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chillcapped/BDO-Boss-Timers/issues"
+  },
+  "homepage": "https://github.com/Chillcapped/BDO-Boss-Timers#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "client-sessions": "^0.7.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "mdi": "^1.7.22",
+    "mongoose": "^4.6.0",
+    "nodemon": "^1.10.2",
+    "serve-favicon": "^2.3.0",
+    "twitch-api": "^0.4.5"
+  }
+}

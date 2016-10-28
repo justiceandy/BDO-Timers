@@ -1,0 +1,102 @@
+<dom-module id="app-launcher">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      margin: auto;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+      border-top: 1px solid #202020;
+    }
+
+  </style>
+  <template>
+    <template is="dom-if" if="{{view.boss}}">
+      <boss-launcher params="{{params}}" route="{{route}}"></boss-launcher>
+    </template>
+    <template is="dom-if" if="{{view.account}}">
+      <account-launcher params="{{params}}" route="{{route}}"></account-launcher>
+    </template>
+    <template is="dom-if" if="{{view.browse}}">
+      <browse-launcher params="{{params}}" route="{{route}}"></browse-launcher>
+    </template>
+    <template is="dom-if" if="{{view.tracker}}">
+      <tracker-launcher params="{{params}}" route="{{route}}"></tracker-launcher>
+    </template>
+    <template is="dom-if" if="{{view.twitch}}">
+      <twitch-launcher params="{{params}}" route="{{route}}"></twitch-launcher>
+    </template>
+    <template is="dom-if" if="{{view.discord}}">
+      <discord-launcher params="{{params}}" route="{{route}}"></discord-launcher>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "app-launcher",
+      properties: {
+        route: {
+          type: String,
+          notify: true,
+          observer: "routeChanged"
+        },
+        tab: {
+          type: String,
+          notify: true,
+          observer: "tabChanged"
+        },
+        params: {
+          type: Object,
+          notify: true,
+          observer: "paramsChanged"
+        },
+        loading: {
+          type: Boolean,
+          notify: true,
+          value: true,
+          observer: "loaderChanged"
+        },
+        view: {
+          type: Object,
+          notify: true,
+          observer: 'viewChanged'
+        }
+      },
+      paramsChanged: function(e){
+        var view = {};
+        console.log(e);
+        view[e.controller] = true;
+        console.log(view);
+        this.set('controller', e.controller);
+        this.set('view', view);
+        this.set('prod', e.id);
+      },
+      loaderChanged: function(e){
+        console.log(e);
+      },
+      viewChanged: function(e){
+        console.log(e);
+      },
+      routeChanged: function(e){
+        var view = {};
+        view[e] = true;
+      },
+      contentUpdated: function(e){
+        //console.log(e);
+      },
+      attachedCallback: function(e){
+
+      },
+      tabChanged: function(e){
+        console.log(e);
+        page('/'+e);
+      },
+      ready: function(){
+
+
+      }
+    });
+  </script>
+</dom-module>
